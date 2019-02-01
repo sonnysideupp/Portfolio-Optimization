@@ -35,9 +35,21 @@ VarAAPL = np.var(AAPL['Return'])
 VarWTW = np.var(WTW['Return'])
 VarWB = np.var(WB['Return'])
 
-print(MeanAAPL)
-print(MeanWTW )
-print(MeanWB)
-print(VarAAPL)
-print(VarWTW )
-print(VarWB)
+AAPLreturn = pd.Series.as_matrix(AAPL['Return'])
+WTWreturn = pd.Series.as_matrix(WTW['Return'])
+WBreturn = pd.Series.as_matrix(WB['Return'])
+x = []
+x.append(AAPLreturn)
+x.append(WTWreturn)
+x.append(WBreturn)
+covariancematrix = np.cov(x)
+
+
+def lagrangian(w,lamda1,lamda2,sigma,a0,mean):
+    part1 = (1/2)* np.matmul(np.matmul(w.transpose(),sigma),w)
+    part2 = lamda1*(a0-np.matmul(w.transpose(),mean) )
+    ones = np.array([1]*len(w))
+    part3 = lamda2*(1- np.matmul(w.transpose(),ones) )
+    return part1 + part2 + part3
+
+
